@@ -1,2 +1,2 @@
 # library-manager
-Library Management Application using SQL and Python
+Library Management Application using SQL and Node.js
