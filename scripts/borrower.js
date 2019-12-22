@@ -99,6 +99,7 @@ function promptBranchSelect(results) {
             }
             else {
                 const result = checkChoice(val.choice, results);
+                // TODO:
                 console.log(result);
             }
         });
