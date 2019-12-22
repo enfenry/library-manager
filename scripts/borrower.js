@@ -1,5 +1,5 @@
-module.exports = {
-    start: function() {
-   console.log('Borrower!')
-    }
-}
+const app = require('../app');
+const inquirer = require('inquirer');
+var connection;
+
+exports.start = start;

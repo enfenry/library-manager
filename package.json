@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/enfenry/library-manager#readme",
   "dependencies": {
-    "console.table": "^0.10.0",
     "inquirer": "^7.0.1",
     "mysql": "^2.17.1"
   }
