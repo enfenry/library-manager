@@ -2,7 +2,7 @@ const app = require('../app');
 const inquirer = require('inquirer');
 var connection;
 
-exports.addBooksMenuText = function(books) {
+exports.addBookMenuText = function(books) {
     return books.map((book, index) => {
         book.menuText = `${index + 1}) ${book.title} by ${book.authorName}`;
         return book;
@@ -10,9 +10,16 @@ exports.addBooksMenuText = function(books) {
 }
 
 exports.addBranchMenuText = function(branches) {
-    return branches.map((result, index) => {
-        result.menuText = `${index + 1}) ${result.branchName}, ${result.branchAddress}`;
-        return result;
+    return branches.map((branch, index) => {
+        branch.menuText = `${index + 1}) ${branch.branchName}, ${branch.branchAddress}`;
+        return branch;
+    })
+}
+
+exports.addLoanMenuText = function(loans) {
+    return loans.map((loan, index) => {
+        loan.menuText = `${index + 1}) ${loan.title}, ${loan.branchName}`;
+        return loan;
     })
 }
 

@@ -131,7 +131,7 @@ function librarianRetrieveBooks(branch) {
     connection.query('CALL LibrarianRetrieveBooks(?)', branch.branchId,
         function (err, res, fields) {
             if (err) throw err;
-            const books = utils.addBooksMenuText(res[0]);
+            const books = utils.addBookMenuText(res[0]);
             promptAddCopies(books, branch);
         });
 }
