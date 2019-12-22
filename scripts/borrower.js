@@ -1,9 +1,13 @@
 const app = require('../app');
 const inquirer = require('inquirer');
 var connection;
+var utils;
+var queries;
 
 function start() {
     connection = app.connection;
+    utils = require('./utils');
+    queries = require('./queries');
 
     inquirer
         .prompt([{
@@ -12,7 +16,7 @@ function start() {
             message: 'Enter your Card Number:'
         }])
         .then(function (val) {
-            checkBorrowerExists(val.cardNo.trim())
+            checkBorrowerExists(val.cardNo.trim());
         });
 }
 
@@ -21,18 +25,18 @@ function checkBorrowerExists(cardNo) {
         function (err, res, fields) {
             if (err) throw err;
             if (res[0].length) {
-                promptLoanMenu()
+                promptLoanMenu(cardNo);
             }
             else {
                 // If Borrower provides invalid CardNo, return to previous prompt
-                start()
+                start();
             }
         });
 }
 
 // BORR1:
-function promptLoanMenu() {
-    const choices = ['1) Check out a book', '2) Return a Book', '3) Quit to Previous (should take you menu MAIN)'];
+function promptLoanMenu(cardNo) {
+    const choices = ['1) Check out a book', '2) Return a Book', '3) Quit to Previous'];
 
     inquirer
         .prompt([{
@@ -43,12 +47,13 @@ function promptLoanMenu() {
         .then(function (val) {
             switch (val.choice) {
                 case choices[0]:
-                    // Begin Book Checkout Process
-                    showBranches();
+                    // Begin Book Checkout Process BORR1 Option 1:
+                    // execute showBranches then promptBranchSelect function
+                    queries.showBranches(promptBranchSelect,cardNo);
                     break;
                 case choices[1]:
                     // TODO:
-                    // Begin Book Return Process
+                    // Begin Book Return Process BORR1 Option 2
                     console.log('return a book');
                     break;
                 case choices[choices.length - 1]:
@@ -61,29 +66,9 @@ function promptLoanMenu() {
         });
 }
 
-// BORR1 Option 1:
-function showBranches() {
-    connection.query('SELECT * FROM tbl_library_branch', function (err, res) {
-        if (err) throw err;
-        const results = addBranchMenuText(res)
-        promptBranchSelect(results);
-    });
-}
-
-function addBranchMenuText(results) {
-    return results.map((result, index) => {
-        result.menuText = `${index + 1}) ${result.branchName}, ${result.branchAddress}`;
-        return result;
-    })
-}
-
-function promptBranchSelect(results) {
+function promptBranchSelect(branches,cardNo) {
     // Prompts user for what branch they manage
-    let choices = [];
-    results.forEach(result => {
-        choices.push(result.menuText);
-    })
-    choices.push(`${results.length}) Quit to previous`)
+    let choices = utils.getChoiceList(branches);
 
     inquirer
         .prompt([{
@@ -95,23 +80,55 @@ function promptBranchSelect(results) {
         .then(function (val) {
             // If user selects Quit to Previous, go back to previous menu
             if (val.choice === choices[choices.length - 1]) {
-                showBranches();
+                promptLoanMenu(cardNo);
             }
             else {
-                const result = checkChoice(val.choice, results);
-                // TODO:
-                console.log(result);
+                const branch = utils.checkChoice(val.choice, branches);
+                borrowerRetrieveBooks(branch,cardNo);
             }
         });
 }
 
-function checkChoice(choice, results) {
-    for (let i = 0; i < results.length; i++) {
-        if (choice === results[i].menuText) {
-            return results[i];
+function borrowerRetrieveBooks(branch,cardNo) {
+    connection.query('CALL BorrowerRetrieveBooks(?)', branch.branchId,
+        function (err, res, fields) {
+            if (err) throw err;
+            const books = utils.addBooksMenuText(res[0]);
+             promptBookSelect(books,branch,cardNo);
+        });
+}
+
+function promptBookSelect(books,branch,cardNo) {
+    let choices = utils.getChoiceList(books);
+
+    inquirer
+    .prompt([{
+        type: 'list',
+        name: 'choice',
+        message: 'Pick the Book you want to check out:',
+        choices: choices
+    }])
+    .then(function (val) {
+        if (val.choice === choices[choices.length - 1]) {
+            promptLoanMenu(cardNo);
         }
-    }
-    process.exit(0);
+        else {
+            const book = utils.checkChoice(val.choice, books);
+            console.log('book',book);
+            addLoan(book,books,branch,cardNo)
+        }
+    })
+}
+
+function addLoan(book,books,branch,cardNo){
+    
+    connection.query('CALL AddLoan(?,?,?)', [book.bookId, branch.branchId, cardNo],
+    function (err, res, fields) {
+        if (err) throw err;
+        console.log('Successfully Updated!');
+        // Go back to previous menu
+        promptBookSelect(books,branch)
+    });
 }
 
 exports.start = start;
