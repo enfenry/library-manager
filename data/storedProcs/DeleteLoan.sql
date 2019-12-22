@@ -1,4 +1,4 @@
-    DROP PROCEDURE IF EXISTS ProcName;
+    DROP PROCEDURE IF EXISTS DeleteLoan;
 
 	DELIMITER //
     CREATE  PROCEDURE `DeleteLoan`(IN BookId int(11), BranchId int(11), CardNo int(11))
