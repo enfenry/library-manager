@@ -13,5 +13,4 @@ From root directory:
 1.  MySQL
 2.  Node.js
 3.  inquirer
-4.  console.table
 

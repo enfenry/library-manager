@@ -1,10 +1,7 @@
 const librarian = require('./scripts/librarian');
 const admin = require('./scripts/admin');
 const borrower = require('./scripts/borrower');
-
 const inquirer = require('inquirer');
-const cTable = require('console.table');
-
 const connection = require('./config').connection;
 
 connection.connect(function (err) {
@@ -12,19 +9,6 @@ connection.connect(function (err) {
     exports.connection = connection;
     determineUser();
 });
-
-// function start() {
-//     connection.query('CALL new_student(?, ?, ?, ?, ?, ?, ?)', [first_name, last_name, email, password, gpa, major, classification],
-//         function (err, res, fields) {
-//             if (err) throw err;
-//             // console.log(res[0])
-//             const table = cTable.getTable(res[0]);
-//             console.log('');
-//             console.log(table);
-//             console.log('');
-//             determineUser();
-//         });
-// };
 
 function determineUser() {
     const choices = ['1) Librarian', '2) Administrator', '3) Borrower'];

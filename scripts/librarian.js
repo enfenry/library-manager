@@ -1,9 +1,5 @@
 const app = require('../app');
-
-// const mysql = require('mysql');
 const inquirer = require('inquirer');
-const cTable = require('console.table');
-
 var connection;
 
 // LIB1:
@@ -35,7 +31,6 @@ function showBranches() {
     connection.query('SELECT * FROM tbl_library_branch', function (err, res) {
         if (err) throw err;
         const results = addBranchMenuText(res)
-
         promptBranchSelect(results);
     });
 }
