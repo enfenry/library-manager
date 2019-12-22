@@ -119,7 +119,7 @@ function promptBranchUpdate(result) {
         Please enter new branch name or enter N/A for no change:`,
     }])
     .then(function (val) {
-        switch(val.branchName.toLowerCase()) {
+        switch(val.branchName.trim().toLowerCase()) {
             case 'quit':
                 // If user selects quit, go back to previous menu
                 promptBranchManagement(result);
@@ -129,7 +129,7 @@ function promptBranchUpdate(result) {
                 // CHANGE NOTHING
             break;
             default:
-                result.branchName = val.branchName;
+                result.branchName = val.branchName.trim();
             break;
         }
         inquirer
@@ -139,7 +139,7 @@ function promptBranchUpdate(result) {
             message: `Please enter new branch address or enter N/A for no change:`,
         }])
         .then(function(val) {
-            switch(val.branchAddress.toLowerCase()) {
+            switch(val.branchAddress.trim().toLowerCase()) {
                 case 'quit':
                     // If user selects quit, go back to previous menu
                     promptBranchManagement(result);
@@ -149,7 +149,7 @@ function promptBranchUpdate(result) {
                     // CHANGE NOTHING
                 break;
                 default:
-                    result.branchAddress = val.branchAddress;
+                    result.branchAddress = val.branchAddress.trim();
                 break;
             }
             updateBranch(result);
@@ -215,7 +215,7 @@ function promptAddCopies(results,branch) {
                 Enter new number of copies:`,
             }])
             .then(function (val) {
-                res.noOfCopies = val.noOfCopies;
+                res.noOfCopies = val.noOfCopies.trim();
                 librarianModBooks(res,branch);
             })
         }
