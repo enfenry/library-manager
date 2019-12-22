@@ -12,7 +12,7 @@ function start() {
             message: 'Enter your Card Number:'
         }])
         .then(function (val) {
-            checkBorrowerExists(val.cardNo)
+            checkBorrowerExists(val.cardNo.trim())
         });
 }
 
