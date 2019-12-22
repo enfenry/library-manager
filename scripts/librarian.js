@@ -22,7 +22,7 @@ function start() {
             }
             // If user selects Quit to Previous, go back to previous menu
             else if (val.choice === choices[choices.length - 1]) {
-                goBackTo(app.determineUser)
+                app.determineUser();
             }
             else {
                 process.exit(0);
@@ -30,9 +30,7 @@ function start() {
         });
 }
 
-function goBackTo(func) {
-    func();
-}
+
 
 // LIB2:
 function showBranches() {
@@ -68,7 +66,7 @@ function promptBranchSelect(results) {
         .then(function (val) {
             // If user selects Quit to Previous, go back to previous menu
             if (val.choice === choices[choices.length - 1]) {
-                goBackTo(start)
+                start();
             }
             else {
                 const result = checkChoice(val.choice, results);
@@ -101,14 +99,14 @@ function promptBranchManagement(result) {
         }])
         .then(function (val) {
             if (val.choice === choices[0]) {
-                updateBranch(result);
+                promptBranchUpdate(result);
             }
             else if (val.choice === choices[1]) {
-                addCopies(result);
+                promptAddCopies(result);
             }
             // If user selects Quit to Previous, go back to previous menu
             else if (val.choice === choices[choices.length - 1]) {
-                goBackTo(showBranches)
+                showBranches()
             }
             else {
                 process.exit(0);
@@ -116,13 +114,69 @@ function promptBranchManagement(result) {
         });
 }
 
-function updateBranch(result) {
-    console.log('updateBranch');
-    
+// LIB3 Option 1: prompt Librarian to update details of Library
+function promptBranchUpdate(result) {
+    inquirer
+    .prompt([{
+        type: "input",
+        name: "branchName",
+        message: `You have chosen to update the Branch with Branch Id: ${result.branchId} and Branch Name: ${result.branchName}. 
+        Enter 'quit' at any prompt to cancel operation.
+        Please enter new branch name or enter N/A for no change:`,
+    }])
+    .then(function (val) {
+        switch(val.branchName.toLowerCase()) {
+            case 'quit':
+                // If user selects quit, go back to previous menu
+                promptBranchManagement(result);
+            break;
+            case 'n/a':
+            case '':
+                // CHANGE NOTHING
+            break;
+            default:
+                result.branchName = val.branchName;
+            break;
+        }
+        inquirer
+        .prompt([{
+            type: "input",
+            name: "branchAddress",
+            message: `Please enter new branch address or enter N/A for no change:`,
+        }])
+        .then(function(val) {
+            switch(val.branchAddress.toLowerCase()) {
+                case 'quit':
+                    // If user selects quit, go back to previous menu
+                    promptBranchManagement(result);
+                break;
+                case 'n/a':
+                case '':
+                    // CHANGE NOTHING
+                break;
+                default:
+                    result.branchAddress = val.branchAddress;
+                break;
+            }
+            updateBranch(result);
+        });
+    });
 }
 
-function addCopies(result) {
-    console.log('addCopies');
+// Query database and Update details of branch
+function updateBranch(result) {
+        connection.query("CALL UpdateBranch(?,?,?)", [result.branchId, result.branchName, result.branchAddress],
+        function (err, res, fields) {
+            if (err) throw err;
+            console.log('Successfully Updated!');
+            // Go back to previous menu
+            promptBranchManagement(result)
+        });
+}
+
+// LIB3 Option 2: prompt Librarian to add copies of a book
+function promptAddCopies(result) {
+    console.log('promptAddCopies');
 }
 
 exports.start = start;
