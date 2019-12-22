@@ -49,12 +49,12 @@ function promptLoanMenu(cardNo) {
                 case choices[0]:
                     // Begin Book Checkout Process BORR1 Option 1:
                     // execute showBranches then promptBranchSelect function
-                    queries.showBranches(promptBranchSelect,cardNo);
+                    queries.showBranches(promptBranchSelect, cardNo);
                     break;
                 case choices[1]:
                     // TODO:
                     // Begin Book Return Process BORR1 Option 2
-                    console.log('return a book');
+                    selectLoans(cardNo);
                     break;
                 case choices[choices.length - 1]:
                     // If user selects Quit to Previous, go back to previous menu
@@ -66,7 +66,8 @@ function promptLoanMenu(cardNo) {
         });
 }
 
-function promptBranchSelect(branches,cardNo) {
+// BORR1 Option 1
+function promptBranchSelect(branches, cardNo) {
     // Prompts user for what branch they manage
     let choices = utils.getChoiceList(branches);
 
@@ -74,7 +75,7 @@ function promptBranchSelect(branches,cardNo) {
         .prompt([{
             type: 'list',
             name: 'choice',
-            message: 'Pick the Branch you want to check out from:',
+            message: `Pick the Branch you want to check out from:`,
             choices: choices
         }])
         .then(function (val) {
@@ -84,28 +85,70 @@ function promptBranchSelect(branches,cardNo) {
             }
             else {
                 const branch = utils.checkChoice(val.choice, branches);
-                borrowerRetrieveBooks(branch,cardNo);
+                borrowerRetrieveBooks(branch, cardNo);
             }
         });
 }
 
-function borrowerRetrieveBooks(branch,cardNo) {
+function borrowerRetrieveBooks(branch, cardNo) {
     connection.query('CALL BorrowerRetrieveBooks(?)', branch.branchId,
         function (err, res, fields) {
             if (err) throw err;
-            const books = utils.addBooksMenuText(res[0]);
-             promptBookSelect(books,branch,cardNo);
+            const books = utils.addBookMenuText(res[0]);
+            promptBookSelect(books, branch, cardNo);
         });
 }
 
-function promptBookSelect(books,branch,cardNo) {
+function promptBookSelect(books, branch, cardNo) {
     let choices = utils.getChoiceList(books);
 
+    inquirer
+        .prompt([{
+            type: 'list',
+            name: 'choice',
+            message: 'Pick the Book you want to check out:',
+            choices: choices
+        }])
+        .then(function (val) {
+            if (val.choice === choices[choices.length - 1]) {
+                promptLoanMenu(cardNo);
+            }
+            else {
+                const book = utils.checkChoice(val.choice, books);
+                addLoan(book, books, branch, cardNo)
+            }
+        })
+}
+
+function addLoan(book, books, branch, cardNo) {
+    connection.query('CALL AddLoan(?,?,?)', [book.bookId, branch.branchId, cardNo],
+        function (err, res, fields) {
+            if (err) throw err;
+            console.log('Successfully Updated!');
+            // Go back to previous menu
+            promptBookSelect(books, branch, cardNo)
+        });
+}
+
+// BORR1 Option 2
+function selectLoans(cardNo) {
+    connection.query('CALL SelectLoans(?)', cardNo,
+        function (err, res, fields) {
+            if (err) throw err;
+            
+            const loans = utils.addLoanMenuText(res[0]);
+            promptLoanSelect(loans,cardNo);
+        });
+}
+
+function promptLoanSelect(loans,cardNo) {
+    let choices = utils.getChoiceList(loans);
+    // console.log('choices',choices);
     inquirer
     .prompt([{
         type: 'list',
         name: 'choice',
-        message: 'Pick the Book you want to check out:',
+        message: 'Pick the Book you want to return:',
         choices: choices
     }])
     .then(function (val) {
@@ -113,20 +156,19 @@ function promptBookSelect(books,branch,cardNo) {
             promptLoanMenu(cardNo);
         }
         else {
-            const book = utils.checkChoice(val.choice, books);
-            addLoan(book,books,branch,cardNo)
+            const loan = utils.checkChoice(val.choice, loans);
+            deleteLoan(loan,cardNo);
         }
     })
 }
 
-function addLoan(book,books,branch,cardNo){
-    
-    connection.query('CALL AddLoan(?,?,?)', [book.bookId, branch.branchId, cardNo],
+function deleteLoan(loan,cardNo) {
+    connection.query('CALL DeleteLoan(?,?,?)', [loan.bookId, loan.branchId, cardNo],
     function (err, res, fields) {
         if (err) throw err;
-        console.log('Successfully Updated!');
-        // Go back to previous menu
-        promptBookSelect(books,branch,cardNo)
+        
+        console.log('Successfully returned!')
+        selectLoans(cardNo);
     });
 }
 
