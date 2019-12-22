@@ -114,7 +114,6 @@ function promptBookSelect(books,branch,cardNo) {
         }
         else {
             const book = utils.checkChoice(val.choice, books);
-            console.log('book',book);
             addLoan(book,books,branch,cardNo)
         }
     })
@@ -127,7 +126,7 @@ function addLoan(book,books,branch,cardNo){
         if (err) throw err;
         console.log('Successfully Updated!');
         // Go back to previous menu
-        promptBookSelect(books,branch)
+        promptBookSelect(books,branch,cardNo)
     });
 }
 
