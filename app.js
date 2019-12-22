@@ -14,7 +14,7 @@ connection.connect(function (err) {
 });
 
 // function start() {
-//     connection.query("CALL new_student(?, ?, ?, ?, ?, ?, ?)", [first_name, last_name, email, password, gpa, major, classification],
+//     connection.query('CALL new_student(?, ?, ?, ?, ?, ?, ?)', [first_name, last_name, email, password, gpa, major, classification],
 //         function (err, res, fields) {
 //             if (err) throw err;
 //             // console.log(res[0])
@@ -30,9 +30,9 @@ function determineUser() {
     const choices = ['1) Librarian', '2) Administrator', '3) Borrower'];
     inquirer
         .prompt([{
-            type: "list",
-            name: "choice",
-            message: "Welcome to the GCIT Library Management System. Which category of a user are you?",
+            type: 'list',
+            name: 'choice',
+            message: 'Welcome to the GCIT Library Management System. Which category of a user are you?',
             choices: choices
         }])
         .then(function (val) {
