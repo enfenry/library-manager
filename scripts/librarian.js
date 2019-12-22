@@ -22,7 +22,7 @@ function start() {
             }
             // If user selects Quit to Previous, go back to previous menu
             else if (val.choice === choices[choices.length - 1]) {
-                goBack(app.determineUser)
+                goBackTo(app.determineUser)
             }
             else {
                 process.exit(0);
@@ -30,8 +30,7 @@ function start() {
         });
 }
 
-
-function goBack(func) {
+function goBackTo(func) {
     func();
 }
 
@@ -61,30 +60,69 @@ function promptBranchSelect(results) {
     choices.push(`${results.length}) Quit to previous`)
 
     inquirer
-        .prompt([
-            {
-                type: "list",
-                name: "choice",
-                choices: choices,
-                validate: function (val) {
-                    return !isNaN(val);
-                }
-            }
-        ])
+        .prompt([{
+            type: "list",
+            name: "choice",
+            choices: choices
+        }])
         .then(function (val) {
             // If user selects Quit to Previous, go back to previous menu
             if (val.choice === choices[choices.length - 1]) {
-                goBack(start)
+                goBackTo(start)
             }
-            else if (val.choice === choices[0]) {
-                // showBranches();
-                console.log('TODO')
+            else {
+                const result = checkChoice(val.choice, results);
+                promptBranchManagement(result)
+            }
+        });
+}
 
+function checkChoice(choice, results) {
+    for (let i = 0; i < results.length; i++) {
+        if (choice === results[i].menuText) {
+            return results[i];
+        }
+    }
+    process.exit(0);
+}
+
+// LIB3:
+function promptBranchManagement(result) {
+    let choices = [
+        '1) Update the details of the Library',
+        '2) Add copies of Book to the Branch',
+        '3) Quit to previous'
+    ];
+    inquirer
+        .prompt([{
+            type: "list",
+            name: "choice",
+            choices: choices
+        }])
+        .then(function (val) {
+            if (val.choice === choices[0]) {
+                updateBranch(result);
+            }
+            else if (val.choice === choices[1]) {
+                addCopies(result);
+            }
+            // If user selects Quit to Previous, go back to previous menu
+            else if (val.choice === choices[choices.length - 1]) {
+                goBackTo(showBranches)
             }
             else {
                 process.exit(0);
             }
         });
+}
+
+function updateBranch(result) {
+    console.log('updateBranch');
+    
+}
+
+function addCopies(result) {
+    console.log('addCopies');
 }
 
 exports.start = start;
