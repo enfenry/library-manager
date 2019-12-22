@@ -51,4 +51,5 @@ function determineUser() {
             }
         });
 }
+
 exports.determineUser = determineUser;
