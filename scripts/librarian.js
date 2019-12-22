@@ -70,7 +70,7 @@ function promptBranchManagement(branch) {
         .then(function (val) {
             switch (val.choice) {
                 case choices[0]:
-                    promptBranchUpdate(branch);
+                    promptUpdateBranch(branch);
                     break;
                 case choices[1]:
                     librarianRetrieveBooks(branch);
@@ -86,7 +86,7 @@ function promptBranchManagement(branch) {
 }
 
 // LIB3 Option 1: prompt Librarian to update details of Library
-function promptBranchUpdate(branch) {
+function promptUpdateBranch(branch) {
     inquirer
         .prompt([{
             type: 'input',
