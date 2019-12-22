@@ -91,19 +91,20 @@ function promptBranchManagement(result) {
             choices: choices
         }])
         .then(function (val) {
-            if (val.choice === choices[0]) {
-                promptBranchUpdate(result);
-            }
-            else if (val.choice === choices[1]) {
-                librarianRetrieveBooks(result);
-            }
-            // If user selects Quit to Previous, go back to previous menu
-            else if (val.choice === choices[choices.length - 1]) {
-                showBranches()
-            }
-            else {
-                process.exit(0);
-            }
+            switch (val.choice) {
+                case choices[0]:
+                    promptBranchUpdate(result);
+                    break;
+                case choices[1]:
+                    librarianRetrieveBooks(result);
+                    break;
+                case choices[choices.length - 1]:
+                    // If user selects Quit to Previous, go back to previous menu
+                    showBranches()
+                    break;
+                default:
+                    process.exit(0);    
+            };
         });
 }
 
