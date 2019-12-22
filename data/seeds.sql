@@ -98,3 +98,8 @@ INSERT INTO `library`.`tbl_borrower` (`cardNo`, `name`, `address`, `phone`) VALU
 INSERT INTO `library`.`tbl_borrower` (`cardNo`, `name`, `address`, `phone`) VALUES ('4', 'name4', 'address4', 'phone4');
 INSERT INTO `library`.`tbl_borrower` (`cardNo`, `name`, `address`, `phone`) VALUES ('5', 'name5', 'address5', 'phone5');
 
+INSERT INTO `library`.`tbl_book_loans` (`bookId`, `branchId`, `cardNo`,`dateOut`,`dueDate`) VALUES ('1', '1', '1',NOW(), NOW() + INTERVAL 7 DAY);
+INSERT INTO `library`.`tbl_book_loans` (`bookId`, `branchId`, `cardNo`,`dateOut`,`dueDate`) VALUES ('1', '2', '1',NOW(), NOW() + INTERVAL 7 DAY);
+INSERT INTO `library`.`tbl_book_loans` (`bookId`, `branchId`, `cardNo`,`dateOut`,`dueDate`) VALUES ('1', '1', '2',NOW(), NOW() + INTERVAL 7 DAY);
+INSERT INTO `library`.`tbl_book_loans` (`bookId`, `branchId`, `cardNo`,`dateOut`,`dueDate`) VALUES ('2', '1', '1',NOW(), NOW() + INTERVAL 7 DAY);
+INSERT INTO `library`.`tbl_book_loans` (`bookId`, `branchId`, `cardNo`,`dateOut`,`dueDate`) VALUES ('2', '2', '2',NOW(), NOW() + INTERVAL 7 DAY);
