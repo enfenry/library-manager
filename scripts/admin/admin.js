@@ -2,6 +2,7 @@ const app = require('../../app');
 const adminPublisher = require('./adminPublisher');
 const adminBranch = require('./adminBranch');
 const adminBorrower = require('./adminBorrower');
+const adminDueDate = require('./adminDueDate');
 const inquirer = require('inquirer');
 
 function start() {
@@ -35,13 +36,12 @@ function start() {
                     adminBranch.start();
                     break;
                 case choices[3]:
-                    // TODO:
                     // ADMIN4: BORROWERS
                     adminBorrower.start();
                     break;
                 case choices[4]:
-                    // TODO:
                     // ADMIN5: OVER-RIDE DUE DATE FOR BOOK LOAN
+                    adminDueDate.start();
                     break;
                 case choices[choices.length - 1]:
                     // If user selects Quit to Previous, go back to previous menu

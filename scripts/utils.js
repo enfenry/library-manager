@@ -25,7 +25,7 @@ exports.addBranchMenuText = function(branches) {
 
 exports.addLoanMenuText = function(loans) {
     return loans.map((loan, index) => {
-        loan.menuText = `${index + 1}) ${loan.title}, ${loan.branchName}`;
+        loan.menuText = `${index + 1}) Borrower: ${loan.name}, Title: ${loan.title}, Branch: ${loan.branchName}, Due: ${loan.dueDate}`;
         return loan;
     })
 }
