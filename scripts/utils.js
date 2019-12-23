@@ -9,6 +9,13 @@ exports.addBookMenuText = function(books) {
     })
 }
 
+exports.addPublisherMenuText = function(publishers) {
+    return publishers.map((publisher, index) => {
+        publisher.menuText = `${index + 1}) ${publisher.publisherName}, ${publisher.publisherAddress}`;
+        return publisher;
+    })
+}
+
 exports.addBranchMenuText = function(branches) {
     return branches.map((branch, index) => {
         branch.menuText = `${index + 1}) ${branch.branchName}, ${branch.branchAddress}`;
