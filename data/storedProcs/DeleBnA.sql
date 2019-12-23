@@ -10,10 +10,7 @@
 
 	DELETE from tbl_book_authors ba WHERE ba.bookId = theBId;
 	DELETE from tbl_book bk WHERE bk.title = ToDeleteBName AND bk.bookId = theBId;
-	IF NOT EXISTS(SELECT 1 FROM tbl_book_authors al WHERE al.authorId = theAId)
-	THEN
-	DELETE FROM tbl_author atr WHERE atr.authorId = theAId;
-	END if;
+	
 	SET SQL_SAFE_UPDATES=0;
 	DELETE from tbl_author atu WHERE NOT EXISTS (SELECT 1 FROM tbl_book_authors bas WHERE atu.authorId = bas.authorID );
 	SET SQL_SAFE_UPDATES=1;
