@@ -124,7 +124,7 @@ function addLoan(book, books, branch, cardNo) {
     connection.query('CALL AddLoan(?,?,?)', [book.bookId, branch.branchId, cardNo],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             promptBookSelect(books, branch, cardNo)
         });
@@ -167,7 +167,7 @@ function deleteLoan(loan,cardNo) {
     function (err, res, fields) {
         if (err) throw err;
         
-        console.log('Successfully returned!')
+        console.log('\n Successfully returned!')
         selectLoans(cardNo);
     });
 }

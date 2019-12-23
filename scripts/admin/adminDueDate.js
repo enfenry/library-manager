@@ -100,7 +100,7 @@ function updateDueDate(loan) {
     connection.query('CALL UpdateDueDate(?,?,?,?)', [loan.bookId, loan.branchId, loan.cardNo, loan.dueDate],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             showLoans(loan.cardNo);
         });

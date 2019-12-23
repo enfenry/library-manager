@@ -3,7 +3,6 @@ const adminBookAuthor = require('./adminBookAuthor');
 const inquirer = require('inquirer');
 var connection;
 var utils;
-var queries;
 
 function start() {
     connection = app.connection;
@@ -47,7 +46,7 @@ function deleteBnA(book) {
     connection.query('CALL DeleteBnA(?,?)', [book.title, book.authorName],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Deleted!');
+            console.log('\n Successfully Deleted!');
             // Go back to previous menu
             adminRetrieveBooks();
         });

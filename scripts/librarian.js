@@ -120,7 +120,7 @@ function updateBranch(branch) {
     connection.query('CALL UpdateBranch(?,?,?)', [branch.branchId, branch.branchName, branch.branchAddress],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             promptBranchManagement(branch)
         });
@@ -172,7 +172,7 @@ function librarianModBooks(result, branch) {
     connection.query('CALL LibrarianModBooks(?,?,?)', [result.noOfCopies, result.bookId, branch.branchId],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             promptBranchManagement(branch);
         });

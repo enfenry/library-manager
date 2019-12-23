@@ -1,4 +1,3 @@
-const app = require('../../../app');
 const admin = require('../admin');
 const addBookAuthor = require('./addBookAuthor');
 const updateBook = require('./updateBook');

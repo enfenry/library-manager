@@ -60,7 +60,7 @@ function addBook(book, publishers) {
     connection.query('CALL AddBook(?,?)', [book.title, book.pubId],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Added!');
+            console.log('\n Successfully Added!');
 
             connection.query('SELECT MAX(b.bookId) AS bookId FROM tbl_book b',
                 function (err, res, fields) {
@@ -98,7 +98,7 @@ function promptSelectBookAuthors(authors, [bookId,publishers]) {
         connection.query('CALL AddAuthor(?,?)', [authorName, bookId],
             function (err, res, fields) {
                 if (err) throw err;
-                console.log('Successfully Added Author!');
+                console.log('\n Successfully Added Author!');
                 promptLoop();
             });
     };
@@ -107,7 +107,7 @@ function promptSelectBookAuthors(authors, [bookId,publishers]) {
         connection.query('CALL AddABTrans(?,?)', [bookId,authorId],
             function (err, res, fields) {
                 if (err) throw err;
-                console.log('Successfully Added ABTrans!');
+                console.log('\n Successfully Added ABTrans!');
             });
     };
 
@@ -145,83 +145,6 @@ function promptSelectBookAuthors(authors, [bookId,publishers]) {
             });
     }
     promptLoop();
-}
-
-
-function promptSelectBook(books, isUpdating) {
-    let choices = utils.getChoiceList(books);
-
-    inquirer
-        .prompt([{
-            type: 'list',
-            name: 'choice',
-            message: `Which book would you like to ${isUpdating ? `Update` : `Delete`}?`,
-            choices: choices
-        }])
-        .then(function (val) {
-            // If user selects Quit to Previous, go back to previous menu
-            if (val.choice === choices[choices.length - 1]) {
-                start();
-            }
-            else {
-                const book = utils.checkChoice(val.choice, books);
-                if (isUpdating) {
-                    promptUpdateBook(book);
-                }
-                else {
-                    deleteBook(book);
-                }
-            }
-        });
-}
-
-function promptUpdateBook(book) {
-    inquirer
-        .prompt([{
-            type: 'input',
-            name: 'title',
-            message: `You have chosen to update a book. \n Enter ‘quit’ at any prompt to cancel operation. \n Please enter new book title or enter N/A for no change:`
-        }, {
-            type: 'input',
-            name: 'bookAddress',
-            message: `Please enter new book address or enter N/A for no change:`
-        }])
-        .then(function (val) {
-            val.bookName = val.bookName.trim();
-            val.bookAddress = val.bookAddress.trim();
-            if (val.bookName.toLowerCase() === 'quit' || val.bookAddress.toLowerCase() === 'quit') {
-                start();
-            }
-            else {
-                if (val.bookName.toLowerCase() !== 'n/a' && val.bookName.toLowerCase() !== '') {
-                    book.bookName = val.bookName;
-                }
-                if (val.bookAddress.toLowerCase() !== 'n/a' && val.bookAddress.toLowerCase() !== '') {
-                    book.bookAddress = val.bookAddress;
-                }
-                updateBook(book);
-            }
-        });
-}
-
-function updateBook(book) {
-    connection.query('CALL UpdateBook(?,?,?)', [book.bookId, book.bookName, book.bookAddress],
-        function (err, res, fields) {
-            if (err) throw err;
-            console.log('Successfully Updated!');
-            // Go back to previous menu
-            queries.showBooks(promptSelectBook, true);
-        });
-}
-
-function deleteBook(book) {
-    connection.query('CALL DeleteBook(?)', book.bookId,
-        function (err, res, fields) {
-            if (err) throw err;
-            console.log('Successfully Deleted!');
-            // Go back to previous menu
-            queries.showBooks(promptSelectBook);
-        });
 }
 
 exports.start = start;

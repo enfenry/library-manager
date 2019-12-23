@@ -88,7 +88,7 @@ function addPublisher(val) {
     connection.query('CALL AddPublisher(?,?,?)', [val.publisherName, val.publisherAddress, val.publisherPhone],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Added!');
+            console.log('\n Successfully Added!');
             // Go back to previous menu
             promptAddPublisher();
         });
@@ -162,7 +162,7 @@ function updatePublisher(publisher) {
     connection.query('CALL UpdatePublisher(?,?,?,?)', [publisher.publisherId, publisher.publisherName, publisher.publisherAddress, publisher.publisherPhone],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             queries.showPublishers(promptSelectPublisher,true);
         });
@@ -172,7 +172,7 @@ function deletePublisher(publisher) {
     connection.query('CALL DeletePublisher(?)', publisher.publisherId,
     function (err, res, fields) {
         if (err) throw err;
-        console.log('Successfully Deleted!');
+        console.log('\n Successfully Deleted!');
         // Go back to previous menu
         queries.showPublishers(promptSelectPublisher);
     });

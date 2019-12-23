@@ -59,7 +59,7 @@ function updateAuthor(author) {
     connection.query('CALL UpdateAuthor(?,?)', [author.authorId, author.authorName],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             queries.showAuthors(promptSelectAuthor)
         });

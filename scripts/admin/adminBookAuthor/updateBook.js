@@ -78,7 +78,7 @@ function updateBook(book) {
     connection.query('CALL UpdateBook(?,?,?)', [book.bookId, book.title, book.pubId],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             adminRetrieveBooks();
         });
