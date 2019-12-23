@@ -23,6 +23,13 @@ exports.addLoanMenuText = function(loans) {
     })
 }
 
+exports.addBorrowerMenuText = function(borrowers) {
+    return borrowers.map((borrower, index) => {
+        borrower.menuText = `${index + 1}) ${borrower.cardNo}, ${borrower.name}`;
+        return borrower;
+    })
+}
+
 exports.getChoiceList = function(results) {
     let choices = [];
     results.forEach(result => {
