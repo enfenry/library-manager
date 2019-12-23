@@ -20,7 +20,7 @@ function start() {
         .then(function (val) {
             if (val.choice === choices[0]) {
                 // LIB2:
-                queries.showBranches(promptBranchSelect);
+                queries.showBranches(promptSelectBranch);
             }
             // If user selects Quit to Previous, go back to previous menu
             else if (val.choice === choices[choices.length - 1]) {
@@ -32,7 +32,7 @@ function start() {
         });
 }
 
-function promptBranchSelect(branches) {
+function promptSelectBranch(branches) {
     // Prompts user for what branch they manage
     let choices = utils.getChoiceList(branches);
 
@@ -77,7 +77,7 @@ function promptBranchManagement(branch) {
                     break;
                 case choices[choices.length - 1]:
                     // If user selects Quit to Previous, go back to previous menu
-                    queries.showBranches(promptBranchSelect);
+                    queries.showBranches(promptSelectBranch);
                     break;
                 default:
                     process.exit(0);
