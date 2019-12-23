@@ -1,5 +1,5 @@
-const app = require('../../app');
-const admin = require('./admin');
+const app = require('../../../app');
+const adminBookAuthor = require('./adminBookAuthor');
 const inquirer = require('inquirer');
 var connection;
 var utils;
@@ -7,51 +7,9 @@ var queries;
 
 function start() {
     connection = app.connection;
-    utils = require('../utils');
-    queries = require('../queries');
-
-    let choices = [
-        '1) Add Book/Author',
-        '2) Update Book',
-        '3) Update Author',
-        '4) Delete Book/Author',
-        '5) Quit to previous'
-    ];
-
-    inquirer
-        .prompt([{
-            type: 'list',
-            name: 'choice',
-            choices: choices
-        }])
-        .then(function (val) {
-            switch (val.choice) {
-                case choices[0]:
-                    // Add Book
-                    queries.showPublishers(promptSelectPublisher);
-                    break;
-                case choices[1]:
-                    // Update Book
-                    queries.showBooks(promptSelectBook, true);
-                    break;
-                case choices[2]:
-                    // TODO:
-                    // Delete Book
-                    queries.showBooks(promptSelectBook);
-                    break;
-                case choices[3]:
-                    // TODO:
-                    // Delete Book
-                    queries.showBooks(promptSelectBook);
-                    break;
-                case choices[choices.length - 1]:
-                    // If user selects Quit to Previous, go back to previous menu
-                    admin.start();
-                    break;
-                default:
-                    process.exit(0);
-            };
-        });
+    utils = require('../../utils');
+    queries = require('../../queries');
+    queries.showPublishers(promptSelectPublisher);
 }
 
 function promptSelectPublisher(publishers) {
@@ -67,7 +25,7 @@ function promptSelectPublisher(publishers) {
         .then(function (val) {
             // If user selects Quit to Previous, go back to previous menu
             if (val.choice === choices[choices.length - 1]) {
-                start();
+                adminBookAuthor.start();
             }
             else {
                 const publisher = utils.checkChoice(val.choice, publishers);
@@ -109,13 +67,13 @@ function addBook(book, publishers) {
                     if (err) throw err;
 
                     // Once book added, begin prompting to add Authors
-                    queries.showAuthors(promptSelectAuthors, [res[0].bookId, publishers ]);
+                    queries.showAuthors(promptSelectBookAuthors, [res[0].bookId, publishers ]);
                 });
 
         });
 }
 
-function promptSelectAuthors(authors, [bookId,publishers]) {
+function promptSelectBookAuthors(authors, [bookId,publishers]) {
     let bookAuthors = [];
     let choices = utils.getAuthorChoiceList(authors);
 
@@ -190,12 +148,6 @@ function promptSelectAuthors(authors, [bookId,publishers]) {
 }
 
 
-
-
-
-
-
-
 function promptSelectBook(books, isUpdating) {
     let choices = utils.getChoiceList(books);
 
@@ -227,8 +179,8 @@ function promptUpdateBook(book) {
     inquirer
         .prompt([{
             type: 'input',
-            name: 'bookName',
-            message: `You have chosen to update a book. \n Enter ‘quit’ at any prompt to cancel operation. \n Please enter new book name or enter N/A for no change:`
+            name: 'title',
+            message: `You have chosen to update a book. \n Enter ‘quit’ at any prompt to cancel operation. \n Please enter new book title or enter N/A for no change:`
         }, {
             type: 'input',
             name: 'bookAddress',

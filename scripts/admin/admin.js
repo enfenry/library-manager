@@ -1,5 +1,5 @@
 const app = require('../../app');
-const adminBookAuthor = require('./adminBookAuthor');
+const adminBookAuthor = require('./adminBookAuthor/adminBookAuthor');
 const adminPublisher = require('./adminPublisher');
 const adminBranch = require('./adminBranch');
 const adminBorrower = require('./adminBorrower');

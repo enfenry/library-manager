@@ -5,7 +5,7 @@ const utils = require('./utils');
 exports.showBooks = function (cb, option) {
     connection.query('SELECT * FROM tbl_book', function (err, res) {
         if (err) throw err;
-        const books = utils.addAuthorMenuText(res);
+        const books = utils.addBookMenuText(res);
         // TODO: change to ternary operator
         if (option) {
             cb(books, option);
