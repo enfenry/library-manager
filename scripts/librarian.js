@@ -159,6 +159,9 @@ function promptAddCopies(books, branch) {
                         type: 'input',
                         name: 'noOfCopies',
                         message: `Existing number of copies: ${res.noOfCopies}. \n Enter new number of copies:`,
+                        validate: function(input) {
+                            return !isNaN(input);
+                        }
                     }])
                     .then(function (val) {
                         res.noOfCopies = val.noOfCopies.trim();

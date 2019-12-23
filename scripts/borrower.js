@@ -13,10 +13,16 @@ function start() {
         .prompt([{
             type: 'input',
             name: 'cardNo',
-            message: 'Enter your Card Number:'
+            message: `Enter your Card Number or 'quit' if you forgot:`
         }])
         .then(function (val) {
-            checkBorrowerExists(val.cardNo.trim());
+            if (!isNaN(val)) {
+                checkBorrowerExists(val.cardNo.trim());
+            }
+            else {
+                app.determineUser();
+            }
+            
         });
 }
 
