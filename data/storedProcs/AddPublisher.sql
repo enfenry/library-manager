@@ -1,7 +1,7 @@
     DROP PROCEDURE IF EXISTS AddPublisher;
 
 	DELIMITER //
-    CREATE DEFINER=`root`@`localhost` PROCEDURE `AddPublisher`(IN  PublisherName varchar(45), 
+    CREATE PROCEDURE `AddPublisher`(IN  PublisherName varchar(45), 
         PublisherAddress varchar(45), PublisherPhone varchar(45))
     BEGIN
         DECLARE newId int(11) DEFAULT 1;
