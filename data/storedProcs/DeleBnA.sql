@@ -1,4 +1,4 @@
-    DROP PROCEDURE IF EXISTS DeleteBnA;
+	DROP PROCEDURE IF EXISTS DeleteBnA;
 
 	DELIMITER //
 	CREATE PROCEDURE DeleteBnA (IN ToDeleteBName varchar(45), ToDeleteAName varchar(45))
@@ -14,6 +14,8 @@
 	THEN
 	DELETE FROM tbl_author atr WHERE atr.authorId = theAId;
 	END if;
-
+	SET SQL_SAFE_UPDATES=0;
+	DELETE from tbl_author atu WHERE NOT EXISTS (SELECT 1 FROM tbl_book_authors bas WHERE atu.authorId = bas.authorID );
+	SET SQL_SAFE_UPDATES=1;
 	END; //
 	DELIMITER ;
