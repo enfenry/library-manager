@@ -163,12 +163,12 @@ function promptSelectBorrower(borrowers) {
             }
             else {
                 const borrower = utils.checkChoice(val.choice, borrowers);
-                promptUpdateBorrower(borrower,borrowers);
+                promptUpdateBorrower(borrower);
             }
         });
 }
 
-function promptUpdateBorrower(borrower,borrowers) {
+function promptUpdateBorrower(borrower) {
     inquirer
         .prompt([{
             type: 'input',
@@ -201,12 +201,12 @@ function promptUpdateBorrower(borrower,borrowers) {
                 if (val.phone.toLowerCase() !== 'n/a' && val.phone.toLowerCase() !== '') {
                     borrower.phone = val.phone
                 }
-                updateBorrower(borrower,borrowers);
+                updateBorrower(borrower);
             }
         });
 }
 
-function updateBorrower(borrower,borrowers) {
+function updateBorrower(borrower) {
     connection.query('CALL UpdateBorrower(?,?,?,?)', [borrower.cardNo, borrower.name, borrower.address, borrower.phone],
         function (err, res, fields) {
             if (err) throw err;
