@@ -34,7 +34,6 @@ function start() {
                     queries.showBranches(promptSelectBranch,true);
                     break;
                 case choices[2]:
-                    // TODO:
                     // Delete Branch
                     queries.showBranches(promptSelectBranch);
                     break;
@@ -88,7 +87,6 @@ function addBranch(val) {
 }
 
 function promptSelectBranch(branches, isUpdating) {
-    // Prompts user for what branch they manage
     let choices = utils.getChoiceList(branches);
 
     inquirer

@@ -1,4 +1,5 @@
 const app = require('../../app');
+const adminBookAuthor = require('./adminBookAuthor');
 const adminPublisher = require('./adminPublisher');
 const adminBranch = require('./adminBranch');
 const adminBorrower = require('./adminBorrower');
@@ -24,8 +25,8 @@ function start() {
         .then(function (val) {
             switch (val.choice) {
                 case choices[0]:
-                    // TODO:
                     // ADMIN1: BOOKS AND AUTHORS
+                    adminBookAuthor.start();
                     break;
                 case choices[1]:
                     // ADMIN2: PUBLISHERS
