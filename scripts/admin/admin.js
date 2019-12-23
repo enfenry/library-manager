@@ -1,4 +1,5 @@
 const app = require('../../app');
+const adminBranch = require('./adminBranch');
 const adminBorrower = require('./adminBorrower');
 const inquirer = require('inquirer');
 
@@ -29,8 +30,8 @@ function start() {
                     // ADMIN2: PUBLISHERS
                     break;
                 case choices[2]:
-                    // TODO:
                     // ADMIN3: BRANCHES
+                    adminBranch.start();
                     break;
                 case choices[3]:
                     // TODO:

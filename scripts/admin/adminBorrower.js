@@ -5,7 +5,6 @@ var connection;
 var utils;
 var queries;
 
-// ADMIN4:
 function start() {
     connection = app.connection;
     utils = require('../utils');
@@ -49,7 +48,6 @@ function start() {
         });
 }
 
-
 function promptAddBorrower() {
     inquirer
         .prompt([{
@@ -73,8 +71,7 @@ function promptAddBorrower() {
             validate: function (input) {
                 return input.trim().toLowerCase() !== 'n/a' && input.trim().toLowerCase() !== '';
             }
-        }
-        ])
+        }])
         .then(function (val) {
             val.name = val.name.trim();
             val.address = val.address.trim();
@@ -140,8 +137,7 @@ function promptUpdateBorrower(borrower) {
             type: 'input',
             name: 'phone',
             message: `Please enter new borrower phone or enter N/A for no change:`
-        }
-        ])
+        }])
         .then(function (val) {
             val.name = val.name.trim();
             val.address = val.address.trim();
@@ -151,13 +147,13 @@ function promptUpdateBorrower(borrower) {
             }
             else {
                 if (val.name.toLowerCase() !== 'n/a' && val.name.toLowerCase() !== '') {
-                    borrower.name = val.name
+                    borrower.name = val.name;
                 }
                 if (val.address.toLowerCase() !== 'n/a' && val.address.toLowerCase() !== '') {
-                    borrower.address = val.address
+                    borrower.address = val.address;
                 }
                 if (val.phone.toLowerCase() !== 'n/a' && val.phone.toLowerCase() !== '') {
-                    borrower.phone = val.phone
+                    borrower.phone = val.phone;
                 }
                 updateBorrower(borrower);
             }
