@@ -1,5 +1,5 @@
 const librarian = require('./scripts/librarian');
-const admin = require('./scripts/admin');
+const admin = require('./scripts/admin/admin');
 const borrower = require('./scripts/borrower');
 const inquirer = require('inquirer');
 const connection = require('./config').connection;
