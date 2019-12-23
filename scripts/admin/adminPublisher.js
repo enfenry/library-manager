@@ -34,7 +34,6 @@ function start() {
                     queries.showPublishers(promptSelectPublisher,true);
                     break;
                 case choices[2]:
-                    // TODO:
                     // Delete Publisher
                     queries.showPublishers(promptSelectPublisher);
                     break;
@@ -96,7 +95,6 @@ function addPublisher(val) {
 }
 
 function promptSelectPublisher(publishers, isUpdating) {
-    // Prompts user for what branch they manage
     let choices = utils.getChoiceList(publishers);
 
     inquirer

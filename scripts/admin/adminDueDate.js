@@ -17,7 +17,6 @@ function start() {
 }
 
 function promptSelectBorrower(borrowers) {
-    // Prompts user for what branch they manage
     let choices = utils.getChoiceList(borrowers);
 
     inquirer

@@ -34,7 +34,6 @@ function start() {
                     queries.showBorrowers(promptSelectBorrower,true);
                     break;
                 case choices[2]:
-                    // TODO:
                     // Delete Borrower
                     queries.showBorrowers(promptSelectBorrower);
                     break;
@@ -96,7 +95,6 @@ function addBorrower(val) {
 }
 
 function promptSelectBorrower(borrowers, isUpdating) {
-    // Prompts user for what branch they manage
     let choices = utils.getChoiceList(borrowers);
 
     inquirer

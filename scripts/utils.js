@@ -9,6 +9,13 @@ exports.addBookMenuText = function(books) {
     })
 }
 
+exports.addAuthorMenuText = function(authors) {
+    return authors.map((author, index) => {
+        author.menuText = `${index + 1}) ${author.authorName}`;
+        return author;
+    })
+}
+
 exports.addPublisherMenuText = function(publishers) {
     return publishers.map((publisher, index) => {
         publisher.menuText = `${index + 1}) ${publisher.publisherName}, ${publisher.publisherAddress}`;
@@ -46,9 +53,28 @@ exports.getChoiceList = function(results) {
     return choices;
 }
 
+exports.getAuthorChoiceList = function(results) {
+    let choices = [];
+    results.forEach(result => {
+        choices.push(result.menuText);
+    })
+    choices.push(`${results.length + 1}) Enter New Author`)
+    choices.push(`${results.length + 2}) Done`)
+    return choices;
+}
+
 exports.checkChoice = function (choice, results) {
     for (let i = 0; i < results.length; i++) {
         if (choice === results[i].menuText) {
+            return results[i];
+        }
+    }
+    process.exit(0);
+}
+
+exports.checkBookId = function (book,results) {
+    for (let i = 0; i < results.length; i++) {
+        if (book.title === results[i].title) {
             return results[i];
         }
     }
