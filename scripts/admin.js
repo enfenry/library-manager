@@ -76,17 +76,17 @@ function promptAdminBorrower() {
         .then(function (val) {
             switch (val.choice) {
                 case choices[0]:
-                    // TODO:
+                    // Add Borrower
                     promptAddBorrower();
                     break;
                 case choices[1]:
-                    // TODO:
                     // Update Borrower
-                    queries.showBorrowers(promptSelectBorrower);
+                    queries.showBorrowers(promptSelectBorrower,true);
                     break;
                 case choices[2]:
                     // TODO:
                     // Delete Borrower
+                    queries.showBorrowers(promptSelectBorrower);
                     break;
                 case choices[choices.length - 1]:
                     // If user selects Quit to Previous, go back to previous menu
@@ -97,6 +97,7 @@ function promptAdminBorrower() {
             };
         });
 }
+
 
 function promptAddBorrower() {
     inquirer
@@ -114,7 +115,7 @@ function promptAddBorrower() {
             validate: function (input) {
                 return input.trim().toLowerCase() !== 'n/a' && input.trim().toLowerCase() !== '';
             }
-        },{
+        }, {
             type: 'input',
             name: 'phone',
             message: `Please enter borrower phone:`,
@@ -122,7 +123,7 @@ function promptAddBorrower() {
                 return input.trim().toLowerCase() !== 'n/a' && input.trim().toLowerCase() !== '';
             }
         }
-    ])
+        ])
         .then(function (val) {
             val.name = val.name.trim();
             val.address = val.address.trim();
@@ -136,17 +137,17 @@ function promptAddBorrower() {
         });
 }
 
-function addBorrower(val){
-        connection.query('CALL AddBorrower(?,?,?)', [val.name, val.address,val.phone],
-            function (err, res, fields) {
-                if (err) throw err;
-                console.log('Successfully Added!');
-                // Go back to previous menu
-                promptAddBorrower();
-            });
+function addBorrower(val) {
+    connection.query('CALL AddBorrower(?,?,?)', [val.name, val.address, val.phone],
+        function (err, res, fields) {
+            if (err) throw err;
+            console.log('Successfully Added!');
+            // Go back to previous menu
+            promptAddBorrower();
+        });
 }
 
-function promptSelectBorrower(borrowers) {
+function promptSelectBorrower(borrowers, isUpdating) {
     // Prompts user for what branch they manage
     let choices = utils.getChoiceList(borrowers);
 
@@ -154,6 +155,7 @@ function promptSelectBorrower(borrowers) {
         .prompt([{
             type: 'list',
             name: 'choice',
+            message: `Which borrower would you like to ${isUpdating ? `Update` : `Delete`}?`,
             choices: choices
         }])
         .then(function (val) {
@@ -163,7 +165,12 @@ function promptSelectBorrower(borrowers) {
             }
             else {
                 const borrower = utils.checkChoice(val.choice, borrowers);
-                promptUpdateBorrower(borrower);
+                if (isUpdating) {
+                    promptUpdateBorrower(borrower);
+                }
+                else {
+                    deleteBorrower(borrower);
+                }
             }
         });
 }
@@ -178,12 +185,12 @@ function promptUpdateBorrower(borrower) {
             type: 'input',
             name: 'address',
             message: `Please enter new borrower address or enter N/A for no change:`
-        },{
+        }, {
             type: 'input',
             name: 'phone',
             message: `Please enter new borrower phone or enter N/A for no change:`
         }
-    ])
+        ])
         .then(function (val) {
             val.name = val.name.trim();
             val.address = val.address.trim();
@@ -212,8 +219,18 @@ function updateBorrower(borrower) {
             if (err) throw err;
             console.log('Successfully Updated!');
             // Go back to previous menu
-            queries.showBorrowers(promptSelectBorrower);
+            queries.showBorrowers(promptSelectBorrower,true);
         });
+}
+
+function deleteBorrower(borrower) {
+    connection.query('CALL DeleteBorrower(?)', borrower.cardNo,
+    function (err, res, fields) {
+        if (err) throw err;
+        console.log('Successfully Deleted!');
+        // Go back to previous menu
+        queries.showBorrowers(promptSelectBorrower);
+    });
 }
 
 exports.start = start;

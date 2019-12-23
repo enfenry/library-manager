@@ -16,10 +16,15 @@ exports.showBranches = function (cb, cardNo) {
     });
 }
 
-exports.showBorrowers = function (cb) {
+exports.showBorrowers = function (cb,isUpdating) {
     connection.query('SELECT * FROM tbl_borrower', function (err, res) {
         if (err) throw err;
         const borrowers = utils.addBorrowerMenuText(res);
-        cb(borrowers);
+        if (isUpdating) {
+            cb(borrowers, isUpdating);
+        }
+        else {
+            cb(borrowers);
+        }
     });
 }
