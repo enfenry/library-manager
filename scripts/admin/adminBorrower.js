@@ -88,7 +88,7 @@ function addBorrower(val) {
     connection.query('CALL AddBorrower(?,?,?)', [val.name, val.address, val.phone],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Added!');
+            console.log('\n Successfully Added!');
             // Go back to previous menu
             promptAddBorrower();
         });
@@ -162,7 +162,7 @@ function updateBorrower(borrower) {
     connection.query('CALL UpdateBorrower(?,?,?,?)', [borrower.cardNo, borrower.name, borrower.address, borrower.phone],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             queries.showBorrowers(promptSelectBorrower,true);
         });
@@ -172,7 +172,7 @@ function deleteBorrower(borrower) {
     connection.query('CALL DeleteBorrower(?)', borrower.cardNo,
     function (err, res, fields) {
         if (err) throw err;
-        console.log('Successfully Deleted!');
+        console.log('\n Successfully Deleted!');
         // Go back to previous menu
         queries.showBorrowers(promptSelectBorrower);
     });

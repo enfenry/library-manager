@@ -80,7 +80,7 @@ function addBranch(val) {
     connection.query('CALL AddBranch(?,?)', [val.branchName, val.branchAddress],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Added!');
+            console.log('\n Successfully Added!');
             // Go back to previous menu
             promptAddBranch();
         });
@@ -146,7 +146,7 @@ function updateBranch(branch) {
     connection.query('CALL UpdateBranch(?,?,?)', [branch.branchId, branch.branchName, branch.branchAddress],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             queries.showBranches(promptSelectBranch,true);
         });
@@ -156,7 +156,7 @@ function deleteBranch(branch) {
     connection.query('CALL DeleteBranch(?)', branch.branchId,
     function (err, res, fields) {
         if (err) throw err;
-        console.log('Successfully Deleted!');
+        console.log('\n Successfully Deleted!');
         // Go back to previous menu
         queries.showBranches(promptSelectBranch);
     });

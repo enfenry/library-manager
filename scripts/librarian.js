@@ -120,7 +120,7 @@ function updateBranch(branch) {
     connection.query('CALL UpdateBranch(?,?,?)', [branch.branchId, branch.branchName, branch.branchAddress],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             promptBranchManagement(branch)
         });
@@ -159,6 +159,9 @@ function promptAddCopies(books, branch) {
                         type: 'input',
                         name: 'noOfCopies',
                         message: `Existing number of copies: ${res.noOfCopies}. \n Enter new number of copies:`,
+                        validate: function(input) {
+                            return !isNaN(input);
+                        }
                     }])
                     .then(function (val) {
                         res.noOfCopies = val.noOfCopies.trim();
@@ -172,7 +175,7 @@ function librarianModBooks(result, branch) {
     connection.query('CALL LibrarianModBooks(?,?,?)', [result.noOfCopies, result.bookId, branch.branchId],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             promptBranchManagement(branch);
         });

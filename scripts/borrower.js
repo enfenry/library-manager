@@ -13,10 +13,16 @@ function start() {
         .prompt([{
             type: 'input',
             name: 'cardNo',
-            message: 'Enter your Card Number:'
+            message: `Enter your Card Number or 'quit' if you forgot:`
         }])
         .then(function (val) {
-            checkBorrowerExists(val.cardNo.trim());
+            if (!isNaN(val)) {
+                checkBorrowerExists(val.cardNo.trim());
+            }
+            else {
+                app.determineUser();
+            }
+            
         });
 }
 
@@ -124,7 +130,7 @@ function addLoan(book, books, branch, cardNo) {
     connection.query('CALL AddLoan(?,?,?)', [book.bookId, branch.branchId, cardNo],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Updated!');
+            console.log('\n Successfully Updated!');
             // Go back to previous menu
             promptBookSelect(books, branch, cardNo)
         });
@@ -167,7 +173,7 @@ function deleteLoan(loan,cardNo) {
     function (err, res, fields) {
         if (err) throw err;
         
-        console.log('Successfully returned!')
+        console.log('\n Successfully returned!')
         selectLoans(cardNo);
     });
 }

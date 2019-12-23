@@ -18,7 +18,7 @@ exports.addAuthorMenuText = function(authors) {
 
 exports.addPublisherMenuText = function(publishers) {
     return publishers.map((publisher, index) => {
-        publisher.menuText = `${index + 1}) ${publisher.publisherName}, ${publisher.publisherAddress}`;
+        publisher.menuText = `${index + 1}) Id: ${publisher.publisherId}, Name: ${publisher.publisherName}, Address: ${publisher.publisherAddress}`;
         return publisher;
     })
 }

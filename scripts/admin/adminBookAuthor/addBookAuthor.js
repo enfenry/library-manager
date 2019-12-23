@@ -1,5 +1,5 @@
-const app = require('../../app');
-const admin = require('./admin');
+const app = require('../../../app');
+const adminBookAuthor = require('./adminBookAuthor');
 const inquirer = require('inquirer');
 var connection;
 var utils;
@@ -7,51 +7,9 @@ var queries;
 
 function start() {
     connection = app.connection;
-    utils = require('../utils');
-    queries = require('../queries');
-
-    let choices = [
-        '1) Add Book/Author',
-        '2) Update Book',
-        '3) Update Author',
-        '4) Delete Book/Author',
-        '5) Quit to previous'
-    ];
-
-    inquirer
-        .prompt([{
-            type: 'list',
-            name: 'choice',
-            choices: choices
-        }])
-        .then(function (val) {
-            switch (val.choice) {
-                case choices[0]:
-                    // Add Book
-                    queries.showPublishers(promptSelectPublisher);
-                    break;
-                case choices[1]:
-                    // Update Book
-                    queries.showBooks(promptSelectBook, true);
-                    break;
-                case choices[2]:
-                    // TODO:
-                    // Delete Book
-                    queries.showBooks(promptSelectBook);
-                    break;
-                case choices[3]:
-                    // TODO:
-                    // Delete Book
-                    queries.showBooks(promptSelectBook);
-                    break;
-                case choices[choices.length - 1]:
-                    // If user selects Quit to Previous, go back to previous menu
-                    admin.start();
-                    break;
-                default:
-                    process.exit(0);
-            };
-        });
+    utils = require('../../utils');
+    queries = require('../../queries');
+    queries.showPublishers(promptSelectPublisher);
 }
 
 function promptSelectPublisher(publishers) {
@@ -67,7 +25,7 @@ function promptSelectPublisher(publishers) {
         .then(function (val) {
             // If user selects Quit to Previous, go back to previous menu
             if (val.choice === choices[choices.length - 1]) {
-                start();
+                adminBookAuthor.start();
             }
             else {
                 const publisher = utils.checkChoice(val.choice, publishers);
@@ -102,20 +60,20 @@ function addBook(book, publishers) {
     connection.query('CALL AddBook(?,?)', [book.title, book.pubId],
         function (err, res, fields) {
             if (err) throw err;
-            console.log('Successfully Added!');
+            console.log('\n Successfully Added!');
 
             connection.query('SELECT MAX(b.bookId) AS bookId FROM tbl_book b',
                 function (err, res, fields) {
                     if (err) throw err;
 
                     // Once book added, begin prompting to add Authors
-                    queries.showAuthors(promptSelectAuthors, [res[0].bookId, publishers ]);
+                    queries.showAuthors(promptSelectBookAuthors, [res[0].bookId, publishers ]);
                 });
 
         });
 }
 
-function promptSelectAuthors(authors, [bookId,publishers]) {
+function promptSelectBookAuthors(authors, [bookId,publishers]) {
     let bookAuthors = [];
     let choices = utils.getAuthorChoiceList(authors);
 
@@ -140,7 +98,7 @@ function promptSelectAuthors(authors, [bookId,publishers]) {
         connection.query('CALL AddAuthor(?,?)', [authorName, bookId],
             function (err, res, fields) {
                 if (err) throw err;
-                console.log('Successfully Added Author!');
+                console.log('\n Successfully Added Author!');
                 promptLoop();
             });
     };
@@ -149,7 +107,7 @@ function promptSelectAuthors(authors, [bookId,publishers]) {
         connection.query('CALL AddABTrans(?,?)', [bookId,authorId],
             function (err, res, fields) {
                 if (err) throw err;
-                console.log('Successfully Added ABTrans!');
+                console.log('\n Successfully Added ABTrans!');
             });
     };
 
@@ -187,89 +145,6 @@ function promptSelectAuthors(authors, [bookId,publishers]) {
             });
     }
     promptLoop();
-}
-
-
-
-
-
-
-
-
-function promptSelectBook(books, isUpdating) {
-    let choices = utils.getChoiceList(books);
-
-    inquirer
-        .prompt([{
-            type: 'list',
-            name: 'choice',
-            message: `Which book would you like to ${isUpdating ? `Update` : `Delete`}?`,
-            choices: choices
-        }])
-        .then(function (val) {
-            // If user selects Quit to Previous, go back to previous menu
-            if (val.choice === choices[choices.length - 1]) {
-                start();
-            }
-            else {
-                const book = utils.checkChoice(val.choice, books);
-                if (isUpdating) {
-                    promptUpdateBook(book);
-                }
-                else {
-                    deleteBook(book);
-                }
-            }
-        });
-}
-
-function promptUpdateBook(book) {
-    inquirer
-        .prompt([{
-            type: 'input',
-            name: 'bookName',
-            message: `You have chosen to update a book. \n Enter ‘quit’ at any prompt to cancel operation. \n Please enter new book name or enter N/A for no change:`
-        }, {
-            type: 'input',
-            name: 'bookAddress',
-            message: `Please enter new book address or enter N/A for no change:`
-        }])
-        .then(function (val) {
-            val.bookName = val.bookName.trim();
-            val.bookAddress = val.bookAddress.trim();
-            if (val.bookName.toLowerCase() === 'quit' || val.bookAddress.toLowerCase() === 'quit') {
-                start();
-            }
-            else {
-                if (val.bookName.toLowerCase() !== 'n/a' && val.bookName.toLowerCase() !== '') {
-                    book.bookName = val.bookName;
-                }
-                if (val.bookAddress.toLowerCase() !== 'n/a' && val.bookAddress.toLowerCase() !== '') {
-                    book.bookAddress = val.bookAddress;
-                }
-                updateBook(book);
-            }
-        });
-}
-
-function updateBook(book) {
-    connection.query('CALL UpdateBook(?,?,?)', [book.bookId, book.bookName, book.bookAddress],
-        function (err, res, fields) {
-            if (err) throw err;
-            console.log('Successfully Updated!');
-            // Go back to previous menu
-            queries.showBooks(promptSelectBook, true);
-        });
-}
-
-function deleteBook(book) {
-    connection.query('CALL DeleteBook(?)', book.bookId,
-        function (err, res, fields) {
-            if (err) throw err;
-            console.log('Successfully Deleted!');
-            // Go back to previous menu
-            queries.showBooks(promptSelectBook);
-        });
 }
 
 exports.start = start;
