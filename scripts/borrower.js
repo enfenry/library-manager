@@ -13,16 +13,18 @@ function start() {
         .prompt([{
             type: 'input',
             name: 'cardNo',
-            message: `Enter your Card Number or 'quit' if you forgot:`
+            message: `Enter your Card Number or 'quit' if you forgot:`,
+            validate: function(input) {
+                return !isNaN(parseInt(input.trim())) || input.trim().toLowerCase() === 'quit';
+            }
         }])
         .then(function (val) {
-            if (!isNaN(val)) {
+            if (val.cardNo.trim() !== 'quit') {
                 checkBorrowerExists(val.cardNo.trim());
             }
             else {
                 app.determineUser();
             }
-            
         });
 }
 
@@ -35,6 +37,7 @@ function checkBorrowerExists(cardNo) {
             }
             else {
                 // If Borrower provides invalid CardNo, return to previous prompt
+                console.log('Invalid Card Number')
                 start();
             }
         });
