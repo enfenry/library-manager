@@ -12,7 +12,7 @@ From root directory:
 6.  run `npm start` or `node app.js`.
 
 ## Technologies Used
-1.  MySQL
-2.  Node.js
-3.  inquirer
-4.  moment.js
+1.  [MySQL](https://www.mysql.com/)
+2.  [Node.js](https://nodejs.org/en/)
+3.  [inquirer](https://www.npmjs.com/package/inquirer)
+4.  [moment.js](https://momentjs.com/)
