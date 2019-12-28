@@ -1,5 +1,5 @@
 # library-manager
-Library Management Application using SQL and Node.js
+Library Management Application using MySQL and Node.js
 
 ## Getting Started
 
